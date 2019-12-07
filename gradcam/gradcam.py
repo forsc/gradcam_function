@@ -4,9 +4,9 @@ from keras.preprocessing import image
 from keras import backend as K
 from keras.applications.vgg16 import preprocess_input
 
-def gradcam_cal(inputImage,layer,inputmodel,chanels):
+def gradcam_cal(inputImage,layer,inputmodel,chanels,inputx,inputy):
   inputImage = io.imread(inputImage)
-  converted = cv2.resize(inputImage, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+  converted = cv2.resize(inputImage, dsize=(inputx, inputy), interpolation=cv2.INTER_CUBIC)
   x = image.img_to_array(converted)
   x = np.expand_dims(x, axis=0)
   #x = preprocess_input(x)
