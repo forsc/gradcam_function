@@ -4,7 +4,7 @@ from keras.preprocessing import image
 from keras import backend as K
 from keras.applications.vgg16 import preprocess_input
 
-def gradcam_cal(inputImage,layer,inputmodel):
+def gradcam_cal(inputImage,layer,inputmodel,chanels):
   inputImage = io.imread(inputImage)
   converted = cv2.resize(inputImage, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
   x = image.img_to_array(converted)
@@ -20,7 +20,7 @@ def gradcam_cal(inputImage,layer,inputmodel):
   pooled_grads = K.mean(grads, axis=(0, 1, 2))
   iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
   pooled_grads_value, conv_layer_output_value = iterate([x])
-  for i in range(64):
+  for i in range(chanels):
     conv_layer_output_value[:, :, i] *= pooled_grads_value[i]
   heatmap = np.mean(conv_layer_output_value, axis = -1)
   heatmap = np.maximum(heatmap, 0)
